@@ -15,5 +15,5 @@ RUN npm install
 # Bundle app source
 COPY . .
 
-EXPOSE 8080
-CMD [ "node", "-r", "ts-node/register", "index.js" ]
+EXPOSE 443
+CMD [ "node", "-r", "ts-node/register", "index.ts" , "443" ]

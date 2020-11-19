@@ -17,10 +17,10 @@ spec:
     spec:
       containers:
         - name: my-admission-controller
-          image: docker-registry.default.svc:5000/default/my-admission-controller
+          image: admissioncontroller
+          imagePullPolicy: Never  # We build it directly into Minikube's Docker registry
           ports:
-          - containerPort: 8080
-            name: http
+          - containerPort: 443
 
 ---
 
@@ -34,7 +34,7 @@ metadata:
 spec:
   ports:
     - name: http
-      port: 8080
+      port: 443
   selector:
     app: my-admission-controller
 ---
@@ -49,10 +49,12 @@ webhooks:
     - apiGroups:   [""]
       apiVersions: ["v1"]
       operations:  ["CREATE"]
-      resources:   ["pods"]
+      resources:   ["configmaps"]
     clientConfig:
       service:
         namespace: "kube-system"
         name: "my-admission-controller"
+      caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUNHRENDQVlHZ0F3SUJBZ0lKQUpRcHZSdGJjY0JJTUEwR0NTcUdTSWIzRFFFQkN3VUFNREl4TURBdUJnTlYKQkFNTUoyMTVMV0ZrYldsemMybHZiaTFqYjI1MGNtOXNiR1Z5TG10MVltVXRjM2x6ZEdWdExuTjJZekFlRncweQpNREV4TVRreE5EUTVNak5hRncweU1ERXlNVGt4TkRRNU1qTmFNREl4TURBdUJnTlZCQU1NSjIxNUxXRmtiV2x6CmMybHZiaTFqYjI1MGNtOXNiR1Z5TG10MVltVXRjM2x6ZEdWdExuTjJZekNCbnpBTkJna3Foa2lHOXcwQkFRRUYKQUFPQmpRQXdnWWtDZ1lFQTJBSTNVeUYwWnhacXl5WmI1bCtXS05BRVRmR1UwbmRQU1Q3QkNvczB3MThNMC9ZZgo3a0R3Z1ByT0s4ZkF2a1p6c0xFTmYwckdXb0hSZkRick0rNW0vdFJmUGlTUWM0MWVTeStKMTgwbHdHTjdXVlhvCm5veE9yNGErK0ExOTBwNEFxa0pOUDZnc2F5Mkhvbk85dHl1b2toMSt0cm4zRGQ4azE3RDhrQ2YvcHljQ0F3RUEKQWFNMk1EUXdNZ1lEVlIwUkJDc3dLWUluYlhrdFlXUnRhWE56YVc5dUxXTnZiblJ5YjJ4c1pYSXVhM1ZpWlMxegplWE4wWlcwdWMzWmpNQTBHQ1NxR1NJYjNEUUVCQ3dVQUE0R0JBSzlKVDNnV2NEa0QyUHlqZEdOVUd1YTVaTm9RCmRUOUxzMnNYcmN6eU9DWDNsQzNvc290czlCakFvZzk0TmpmWEJZV3NrT1lTZ1l0MGVjdG80UjZJOUlDYmJQZWwKejJBcWhweit5YlJsblN1eFU1eXU1QnBrZHBUYnRMejdjYndjMDAyMWZoR0orR3Jsa0N5Y0RCVGM3cGp6NTR1TQpZaVlSQkt5Q2IzYUx6SVh2Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
     admissionReviewVersions: ["v1"]
     sideEffects: None
+
