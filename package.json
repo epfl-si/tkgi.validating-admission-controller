@@ -1,0 +1,20 @@
+{
+  "name": "epfl-tkgi-admissioncontroller",
+  "version": "0.1.0",
+  "description": "A custom validating admission controller that guards the precious resources (disk, network) in the EPFL VMWare clusters",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "TKGI",
+    "Kubernetes",
+    "k8s",
+    "validating",
+    "admission",
+    "controller"
+  ],
+  "author": "IDEV-FSD <idev-fsd@groupes.epfl.ch>",
+  "license": "ISC"
+}
+
