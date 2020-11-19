@@ -1,0 +1,58 @@
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-admission-controller
+  namespace: kube-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-admission-controller
+  template:
+    metadata:
+      labels:
+        app: my-admission-controller
+    spec:
+      containers:
+        - name: my-admission-controller
+          image: docker-registry.default.svc:5000/default/my-admission-controller
+          ports:
+          - containerPort: 8080
+            name: http
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+    name: my-admission-controller
+    namespace: "kube-system"
+    labels:
+      app: my-admission-controller
+spec:
+  ports:
+    - name: http
+      port: 8080
+  selector:
+    app: my-admission-controller
+---
+
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: "pod-policy.example.com"
+webhooks:
+  - name: "pod-policy.example.com"
+    rules:
+    - apiGroups:   [""]
+      apiVersions: ["v1"]
+      operations:  ["CREATE"]
+      resources:   ["pods"]
+    clientConfig:
+      service:
+        namespace: "kube-system"
+        name: "my-admission-controller"
+    admissionReviewVersions: ["v1"]
+    sideEffects: None
