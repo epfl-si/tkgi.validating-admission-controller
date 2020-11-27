@@ -4,6 +4,7 @@
   "description": "A custom validating admission controller that guards the precious resources (disk, network) in the EPFL VMWare clusters",
   "main": "index.ts",
   "scripts": {
+    "start": "node -r ts-node/register index.ts 8888",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
